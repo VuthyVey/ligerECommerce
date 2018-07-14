@@ -5,6 +5,7 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 import '../../ui/layouts/body/body.js';
 import '../../ui/pages/home/home.js';
 import '../../ui/pages/admin/admin.js';
+import '../../ui/pages/admin/newProduct.js';
 import '../../ui/pages/accounts/login.js';
 import '../../ui/pages/learning/learning.js';
 import '../../ui/pages/not-found/not-found.js';
@@ -17,13 +18,6 @@ FlowRouter.route('/', {
   },
 });
 
-FlowRouter.route('/learning', {
-  name: 'App.learning',
-  action() {
-    BlazeLayout.render('App_body', { main: 'learning' });
-  },
-});
-
 FlowRouter.route('/login', {
   name: 'App.login',
   action() {
@@ -31,13 +25,20 @@ FlowRouter.route('/login', {
   },
 });
 
-
 FlowRouter.route('/admin', {
   name: 'App.admin',
   action() {
     BlazeLayout.render('App_body_admin', { main: 'admin' });
   },
 });
+
+FlowRouter.route('/admin/new_product', {
+  name: 'App.newProduct',
+  action() {
+    BlazeLayout.render('App_body_admin', { main: 'App_newProduct' });
+  },
+});
+
 
 FlowRouter.notFound = {
   action() {
