@@ -6,7 +6,14 @@ import '../../components/admin/left-panel.html';
 Template.App_home.rendered = function () {
   import './parallax100.js'
   $('.parallax100').parallax100();
+
+
 }
+
+Template.App_home.onCreated(function () {
+  var x = Roles.userIsInRole(Meteor.userId(), ['normal-user', 'admin']);
+  console.log(x)
+})
 // Template.App_home.rendered = function()  {
 //   // import './slick-custom.js';
 //

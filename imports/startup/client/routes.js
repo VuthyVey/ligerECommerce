@@ -27,19 +27,46 @@ FlowRouter.route('/login', {
   },
 });
 
-FlowRouter.route('/admin', {
-  name: 'App.admin',
-  action() {
-    BlazeLayout.render('lAdmin', { main: 'admin' });
-  },
+var isUserCheck = function (context, redirect, stop) {
+  if (!Meteor.userId()) {
+    Session.set('redirectPath', context.path);
+    redirect('/login');
+  }
+}
+
+var isAdminCheck = function (context, redirect, stop) {
+  var loggedInUser = Meteor.user();
+
+  var x = Roles.userIsInRole(Meteor.user()._id, ['normal-user', 'admin']);
+  console.log(x)
+  if (!Roles.userIsInRole(loggedInUser, ['normal-user'])){ // not admin can't access to the page
+    console.log("Go")
+    BlazeLayout.render('lShop', { main: 'App_notFound' });
+    stop(); // stop moving to next routers functions
+  }
+}
+
+
+var adminRoutes = FlowRouter.group({
+  prefix: '/admin',
+  name: 'admin',
+  triggersEnter: [isUserCheck, isAdminCheck ]
 });
 
-FlowRouter.route('/admin/new_product', {
+// handling /admin route
+adminRoutes.route('/', {
+  action: function() {
+      BlazeLayout.render('lAdmin', { main: 'admin' });
+  }
+});
+
+adminRoutes.route('/new_product', {
   name: 'App.newProduct',
   action() {
     BlazeLayout.render('lAdmin', { main: 'App_newProduct' });
   },
 });
+
 
 
 FlowRouter.notFound = {
