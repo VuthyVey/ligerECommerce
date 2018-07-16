@@ -10,10 +10,6 @@ Template.App_home.rendered = function () {
 
 }
 
-Template.App_home.onCreated(function () {
-  var x = Roles.userIsInRole(Meteor.userId(), ['normal-user', 'admin']);
-  console.log(x)
-})
 // Template.App_home.rendered = function()  {
 //   // import './slick-custom.js';
 //
