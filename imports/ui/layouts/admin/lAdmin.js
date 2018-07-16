@@ -1,6 +1,10 @@
 import './lAdmin.html';
 
-Template.lAdmin.onCreated(function () {
-  Meteor.subscribe('links.all');
-
-});
+Template.lAdmin.helpers({
+  'subscriptionsReady' () {
+    return FlowRouter.subsReady(); // return weather registered subscriptions done with its job
+  },
+  'isAdmin' () {
+      return Roles.userIsInRole(Meteor.user(), ['admin'])
+  }
+})

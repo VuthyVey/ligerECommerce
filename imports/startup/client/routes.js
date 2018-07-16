@@ -27,30 +27,17 @@ FlowRouter.route('/login', {
   },
 });
 
-var isUserCheck = function (context, redirect, stop) {
-  if (!Meteor.userId()) {
-    Session.set('redirectPath', context.path);
+var isUserLoggedIn = function (context, redirect, stop) {
+  if (!Meteor.userId()) { // check if the user is not logged in
+    Session.set('redirectPath', context.path); // session for login page to redirect back
     redirect('/login');
   }
 }
 
-var isAdminCheck = function (context, redirect, stop) {
-  var loggedInUser = Meteor.user();
-
-  var x = Roles.userIsInRole(Meteor.user()._id, ['normal-user', 'admin']);
-  console.log(x)
-  if (!Roles.userIsInRole(loggedInUser, ['normal-user'])){ // not admin can't access to the page
-    console.log("Go")
-    BlazeLayout.render('lShop', { main: 'App_notFound' });
-    stop(); // stop moving to next routers functions
-  }
-}
-
-
 var adminRoutes = FlowRouter.group({
   prefix: '/admin',
   name: 'admin',
-  triggersEnter: [isUserCheck, isAdminCheck ]
+  triggersEnter: [ isUserLoggedIn ]
 });
 
 // handling /admin route
@@ -73,4 +60,8 @@ FlowRouter.notFound = {
   action() {
     BlazeLayout.render('lShop', { main: 'App_notFound' });
   },
+};
+// subscribe as global with FlowRouter register
+FlowRouter.subscriptions = function() {
+  this.register('roles', Meteor.subscribe('roles'));
 };
