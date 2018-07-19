@@ -8,6 +8,7 @@ import '../../ui/layouts/admin/lAdmin.js';
 import '../../ui/pages/home/home.js';
 import '../../ui/pages/admin/admin.js';
 import '../../ui/pages/admin/newProduct.js';
+import '../../ui/pages/admin/allProducts.js';
 import '../../ui/pages/accounts/login.js';
 import '../../ui/pages/learning/learning.js';
 import '../../ui/pages/not-found/not-found.js';
@@ -47,13 +48,36 @@ adminRoutes.route('/', {
   }
 });
 
-adminRoutes.route('/new_product', {
+adminRoutes.route('/products/new', {
   name: 'App.newProduct',
   action() {
+    Session.set("productStatus", "new")
     BlazeLayout.render('lAdmin', { main: 'App_newProduct' });
   },
 });
 
+adminRoutes.route('/products', {
+  name: 'App.allProducts',
+  subscriptions: function (params, queryParams) {
+    this.register('Product All', Meteor.subscribe('productAll'));
+  },
+  action() {
+    BlazeLayout.render('lAdmin', { main: 'App_allProduct' });
+  },
+});
+
+
+adminRoutes.route('/products/edit/:id', {
+  name: 'App.newProduct',
+  subscriptions: function (params, queryParams) {
+    this.register('productById', Meteor.subscribe('productById',params.id));
+  },
+  action(params) {
+    Session.set("productStatus", "edit");
+    Session.set("productId",params.id)
+    BlazeLayout.render('lAdmin', { main: 'App_newProduct' });
+  },
+});
 
 
 FlowRouter.notFound = {

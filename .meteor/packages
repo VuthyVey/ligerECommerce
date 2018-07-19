@@ -3,7 +3,7 @@
 #
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
-msavin:mongol
+
 meteor-base@1.4.0             # Packages every Meteor app needs to have
 mobile-experience@1.0.5       # Packages for a great mobile UX
 mongo@1.5.0                   # The database Meteor supports right now
@@ -33,3 +33,12 @@ aldeed:template-extension
 alanning:roles
 session
 meteortoys:allthings
+sacha:spin
+aldeed:collection2@3.0.0
+msavin:mongol
+momentjs:moment
+dburles:collection-helpers
+twbs:bootstrap
+staringatlights:fast-render
+fortawesome:fontawesome
+skinnygeek1010:validate-form

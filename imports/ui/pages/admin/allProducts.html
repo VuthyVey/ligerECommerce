@@ -1,0 +1,42 @@
+<template name="App_allProduct">
+  <div class="content mt-3">
+      <div class="animated fadeIn">
+          <div class="row">
+
+          <div class="col-md-12">
+
+            <table id="bootstrap-data-table" class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>English Name</th>
+                  <th>Khmer Name</th>
+                  <th>Sale Price</th>
+                  <th>Unit</th>
+                  <th>Category</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each ProductsList}}
+                <tr>
+                  <td>{{englishName}}</td>
+                  <td>{{khmerName}}</td>
+                  <td>${{salePrice}}</td>
+                  <td>{{unit}}</td>
+                  <td>{{category}}</td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+                  </div>
+
+
+
+          </div>
+      </div><!-- .animated -->
+  </div><!-- .content -->
+  <script src="/assets/js/vendor/jquery-2.1.4.min.js"></script>
+  <script src="/assets/js/popper.min.js"></script>
+  <script src="/assets/js/plugins.js"></script>
+  <script src="/assets/js/main.js"></script>
+
+</template>
