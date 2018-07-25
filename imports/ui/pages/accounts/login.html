@@ -1,49 +1,36 @@
 <template name="App_login">
-  	<!-- content page -->
-  	<section class="bgwhite p-t-66 p-b-60">
-  		<div class="container">
-  			<div class="row">
-  				<div class="col-md-3 p-b-30">
-
-  				</div>
-
-  				<div class="col-md-6 p-b-30">
-
-  						<!-- <h4 class="m-text26 p-b-36 p-t-15">
-  							Welcome | Login
-  						</h4> -->
-
-  						  {{> atForm}}
-  				</div>
-  			</div>
-  		</div>
-  	</section>
+  <!-- content page -->
+  <section class="bgwhite p-t-66 p-b-60">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3 p-b-30"></div>
+        <div class="col-md-6 p-b-30">
+          {{> atForm}}
+          <!-- atForm is helper from account-unstyle package -->
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
-<template name="override-atTextInput">
-
-    <div class="bo4 of-hidden size15 m-b-20 at-input {{#if isValidating}}validating{{/if}} {{#if hasError}}has-error{{/if}} {{#if hasSuccess}}has-success{{/if}} {{#if feedback}}has-feedback{{/if}}">
-    <!-- {{#if showLabels}}
-      <label for="at-field-{{_id}}">
-        {{displayName}} {{#unless required}}{{optionalText}}{{/unless}}
-      </label>
-    {{/if}} -->
+<!-- override account-unstyle template to meet the theme standard-->
+<template name="override-atTextInput"> <!-- input of the login and signup-->
+  <div class="bo4 of-hidden size15 m-b-20 at-input {{#if isValidating}}validating{{/if}} {{#if hasError}}has-error{{/if}} {{#if hasSuccess}}has-success{{/if}} {{#if feedback}}has-feedback{{/if}}">
     <input class="sizefull s-text7 p-l-22 p-r-22" type="{{type}}" id="at-field-{{_id}}" name="at-field-{{_id}}" placeholder="{{placeholder}}" autocapitalize="none" autocorrect="off">
     {{#if hasIcon}}
-        <span class="{{iconClass}}"></span>
+      <span class="{{iconClass}}"></span>
     {{/if}}
     {{#if hasError}}
       <span>{{errorText}}</span>
     {{/if}}
   </div>
-
 </template>
 
-
-<template name="override-atPwdFormBtn">
+<!-- override account-unstyle template to meet the theme standard-->
+<template name="override-atPwdFormBtn"> <!-- submit button-->
   <div class="w-size25">
-  <button type="submit" class="at-btn flex-c-m size2 bg1 bo-rad-23 hov1 m-text3 trans-0-4 submit {{submitDisabled}}" id="at-btn">
-    {{buttonText}}
-  </button>
-</div>
+    <button type="submit" class="at-btn flex-c-m size2 bg1 bo-rad-23 hov1 m-text3 trans-0-4 submit {{submitDisabled}}" id="at-btn">
+      {{buttonText}}
+    </button>
+  </div>
 </template>

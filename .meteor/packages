@@ -35,6 +35,7 @@ session
 meteortoys:allthings
 sacha:spin
 aldeed:collection2@3.0.0
+aldeed:schema-index
 msavin:mongol
 momentjs:moment
 dburles:collection-helpers
@@ -42,3 +43,9 @@ twbs:bootstrap
 staringatlights:fast-render
 fortawesome:fontawesome
 skinnygeek1010:validate-form
+cfs:standard-packages
+cfs:gridfs
+# cfs:filesystem
+cfs:ui
+peppelg:bootstrap-3-modal
+numtel:cfs-image-resize           # alternative of graphicsmagick package

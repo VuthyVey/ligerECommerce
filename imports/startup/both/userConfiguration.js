@@ -1,5 +1,6 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
-// import { Roles } from 'meteor/alanning:roles';
+import { Roles } from 'meteor/alanning:roles';
+import { Session } from 'meteor/session';
 
 var myPostLogout = function() {
   //redirect after logout
@@ -45,7 +46,6 @@ AccountsTemplates.configure({
     }
   }
 });
-
 
 AccountsTemplates.addFields([{
   _id: 'userName', // a new input box at the signup page

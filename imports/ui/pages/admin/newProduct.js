@@ -1,1 +1,157 @@
+// import templates
 import './newProduct.html';
+// import collections
+import { Products } from '/imports/api/products/products.js';
+import { Categories } from '/imports/api/categories/categories.js';
+import { Images } from '/imports/api/images/images.js';
+// import functionalities
+import { Meteor } from 'meteor/meteor';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import { Modal } from 'meteor/peppelg:bootstrap-3-modal'; // normal bootstrap code doesn't work so this package is the alternative
+import { _ } from 'meteor/underscore'; //underscore isn't in global scope so we import it
+import { fetchSubCategory } from './javascript/subcategory.js';
+
+Template.App_newProduct.onRendered(function() {
+  Session.set("productImageId", ""); // empty
+
+  if (Session.get('productStatus') == "edit") { // special care to inputs when it's edit mode
+    var productInfo = Products.findOne(); // subscribe already given id params to publication
+    var target = $('#newProductForm');
+
+    // filling info from database to inputs
+    if (productInfo) {
+      $('#englishName').val(productInfo.name.english);
+      $('#khmerName').val(productInfo.name.khmer);
+      $('#regularPrice').val(productInfo.regularPrice);
+      $('#salePrice').val(productInfo.salePrice);
+      $('#unit').val(productInfo.unit);
+      $('#min').val(productInfo.min);
+      $('#step').val(productInfo.step);
+
+      // checkbox has it special id that match with categories slug
+      _.each(productInfo.categories, function(doc) {
+        $('#' + doc).prop("checked", true);
+      });
+
+      $('#purchaseNote').val(productInfo.purchaseNote);
+      $('#description').val(productInfo.description);
+      $('#featured').prop("checked", productInfo.isFeatured);
+      $('#instock').prop("checked", productInfo.isInstock);
+
+      // session handle image | check helpers
+      Session.set('productImageId', productInfo.image._id);
+    } else { // if product ID doesn't exist
+      FlowRouter.go('/');
+    }
+  }
+});
+
+Template.App_newProduct.helpers({
+  currentProductImage() {
+    return Images.findOne({_id: Session.get("productImageId")});
+  },
+
+  isEditMode() {
+    return (Session.get('productStatus') == "edit") ? true : false;
+  },
+
+  categoriesList() {
+    var list = Categories.find({tree: {$size: 0}}).fetch(); // fetch empty tree, in otherword categories no parent
+
+    list = list.map(function(obj) {
+      obj.subcategory = fetchSubCategory(obj.slug); // from import './javascript/subcategory.js';
+      return obj;
+    });
+    return list;
+  }
+});
+
+Template.App_newProduct.events({
+
+  'click #selectImageBtn' (events, templates) {
+    Modal.show('selectImageModal');
+  },
+
+  'submit #newProductForm' (events, template) {
+    events.preventDefault();
+    // get the selected image object
+    const imgObj = Images.findOne({_id: Session.get("productImageId")});
+    // fetch checked categories into the array
+    var selectedCategories = []
+    $("input:checkbox[name=categories]:checked").each(function() {
+      selectedCategories.push($(this).val());
+    });
+    // putting information into schema format
+    const target = events.target;
+    const productInfo = {
+      name: {
+        english: target.englishName.value,
+        khmer: target.khmerName.value,
+      },
+      regularPrice: target.regularPrice.value,
+      salePrice: target.salePrice.value,
+      unit: target.unit.value,
+      min: target.min.value,
+      step: target.step.value,
+      categories: selectedCategories,
+      purchaseNote: target.purchaseNote.value,
+      description: target.description.value,
+      image: imgObj,
+      isFeatured: target.featured.checked,
+      isInstock: target.instock.checked
+    }
+
+    if (Session.get('productStatus') == 'new') {
+      // for inserting
+      Meteor.call('product.new', productInfo, (error, result) => {
+        if (error) {
+          swal("Oops...", error.reason, "error");
+          console.log(error)
+        } else {
+          swal("Yay", productInfo.name.english + " added to database", "success");
+          FlowRouter.go("/admin/products/edit/" + result)
+        }
+      })
+    } else if (Session.get('productStatus') == 'edit') {
+      // for updating
+      Meteor.call('product.update', Session.get('productId'), productInfo, (error, result) => {
+        if (error) {
+          swal("Oops...", error.reason, "error");
+          console.log(error)
+        } else {
+          swal("Yay", productInfo.name.english + " updated to database", "success");
+        }
+      });
+    }
+  },
+
+  'change #upload' (event, template) {
+    var file = $('#upload').get(0).files[0];   // get object from file input
+
+    if (file) {
+      var fsFile = new FS.File(file); // convert to FS.File
+      fsFile.updatedAt(moment().unix()); // change updatedAt format to timestamp
+      fsFile.owner = Meteor.userId(); // default doesn't include, add owner to the image object
+      Images.insert(fsFile, function(err, res) { //insert image // proper way is to call meteor method
+        if (err) {
+          throw new Meteor.Error(err);
+        } else {
+          Session.set('productImageId', res._id);
+        }
+      });
+    }
+  }
+});
+
+Template.selectImageModal.helpers({
+  images: function() {
+    return Images.find({}, {sort: {uploadedAt: -1}}); // new upload come first
+  }
+});
+
+Template.selectImageModal.events({
+  'click .productImage' (e, tpl) {
+    Session.set('productImageId', this._id); // set a new selected image id
+    Modal.hide('selectImageModal');
+  }
+});

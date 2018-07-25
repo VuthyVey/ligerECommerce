@@ -3,11 +3,12 @@
 import { Meteor } from 'meteor/meteor';
 import { Products } from '../products.js';
 
-Meteor.publish('productAll', function () {
+Meteor.publish('productAll', function() {
   return Products.find();
 });
 
-Meteor.publish('productById', function (id) {
-  console.log(id)
-  return Products.find({_id: id});
+Meteor.publish('productById', function(id) {
+  return Products.find({
+    _id: id
+  });
 });

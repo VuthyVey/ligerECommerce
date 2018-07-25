@@ -9,26 +9,33 @@ import '../../ui/pages/home/home.js';
 import '../../ui/pages/admin/admin.js';
 import '../../ui/pages/admin/newProduct.js';
 import '../../ui/pages/admin/allProducts.js';
+import '../../ui/pages/admin/categories.js';
 import '../../ui/pages/accounts/login.js';
-import '../../ui/pages/learning/learning.js';
+
 import '../../ui/pages/not-found/not-found.js';
 
 // Set up all routes in the app
 FlowRouter.route('/', {
   name: 'App.home',
   action() {
-    BlazeLayout.render('lShop', { main: 'App_home' });
+    BlazeLayout.render('lShop', {
+      main: 'App_home'
+    });
   },
 });
+// main: 'App_home'
+// App_home is the template name and main is indicate in layout template
 
 FlowRouter.route('/login', {
-  name: 'App.login',
+  name: 'App.login', // name of the route, it should be unique among all routers
   action() {
-    BlazeLayout.render('lShop', { main: 'App_login' });
+    BlazeLayout.render('lShop', {
+      main: 'App_login'
+    });
   },
 });
 
-var isUserLoggedIn = function (context, redirect, stop) {
+var isUserLoggedIn = function(context, redirect, stop) {
   if (!Meteor.userId()) { // check if the user is not logged in
     Session.set('redirectPath', context.path); // session for login page to redirect back
     redirect('/login');
@@ -38,51 +45,79 @@ var isUserLoggedIn = function (context, redirect, stop) {
 var adminRoutes = FlowRouter.group({
   prefix: '/admin',
   name: 'admin',
-  triggersEnter: [ isUserLoggedIn ]
+  triggersEnter: [isUserLoggedIn] // every time user use admin page, we need to make sure they logged in
 });
 
 // handling /admin route
 adminRoutes.route('/', {
   action: function() {
-      BlazeLayout.render('lAdmin', { main: 'admin' });
+    BlazeLayout.render('lAdmin', {
+      main: 'admin'
+    });
   }
+});
+
+// page with list of all products
+adminRoutes.route('/products', {
+  name: 'App.allProducts',
+  subscriptions: function() {
+    this.register('Product All', Meteor.subscribe('productAll')); //
+  },
+  action() {
+    BlazeLayout.render('lAdmin', {
+      main: 'App_allProduct'
+    });
+  },
 });
 
 adminRoutes.route('/products/new', {
   name: 'App.newProduct',
-  action() {
-    Session.set("productStatus", "new")
-    BlazeLayout.render('lAdmin', { main: 'App_newProduct' });
-  },
-});
-
-adminRoutes.route('/products', {
-  name: 'App.allProducts',
-  subscriptions: function (params, queryParams) {
-    this.register('Product All', Meteor.subscribe('productAll'));
+  subscriptions: function() {
+    this.register("images", Meteor.subscribe("images")); // this is local subscribe, only for this router
+    this.register('categoriesAll', Meteor.subscribe('categoriesAll')); // all categoreis
   },
   action() {
-    BlazeLayout.render('lAdmin', { main: 'App_allProduct' });
+    Session.set("productStatus", "new"); // since route: "/products/new" and "/products/edit" use the same template we use session to tell what mode the user is
+    BlazeLayout.render('lAdmin', {
+      main: 'App_newProduct'
+    });
   },
 });
-
 
 adminRoutes.route('/products/edit/:id', {
   name: 'App.newProduct',
-  subscriptions: function (params, queryParams) {
-    this.register('productById', Meteor.subscribe('productById',params.id));
+  subscriptions: function(params, queryParams) {
+    this.register('productById', Meteor.subscribe('productById', params.id)); // subscribe only to the product with id given
+    this.register("images", Meteor.subscribe("images")); // all images
+    this.register('Categories All', Meteor.subscribe('categoriesAll')); // all the categories
   },
   action(params) {
-    Session.set("productStatus", "edit");
-    Session.set("productId",params.id)
-    BlazeLayout.render('lAdmin', { main: 'App_newProduct' });
+    Session.set("productStatus", "edit"); // new and edit products use the same template
+    Session.set("productId", params.id); // for update to database
+    BlazeLayout.render('lAdmin', {
+      main: 'App_newProduct'
+    });
   },
 });
 
+// new and delete categoreis page
+adminRoutes.route('/categories', {
+  name: 'App.categories',
+  subscriptions: function(params, queryParams) {
+    this.register('Categories All', Meteor.subscribe('categoriesAll')); // categories should be subscribe for categories page
+  },
+  action() {
+    BlazeLayout.render('lAdmin', {
+      main: 'App_categories'
+    });
+  },
+});
 
 FlowRouter.notFound = {
   action() {
-    BlazeLayout.render('lShop', { main: 'App_notFound' });
+    BlazeLayout.render('lShop', {
+      main: 'App_notFound'
+    });
   },
 };
 // subscribe as global with FlowRouter register
