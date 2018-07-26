@@ -105,6 +105,7 @@ adminRoutes.route('/categories', {
   name: 'App.categories',
   subscriptions: function(params, queryParams) {
     this.register('Categories All', Meteor.subscribe('categoriesAll')); // categories should be subscribe for categories page
+    this.register("images", Meteor.subscribe("images")); // all images
   },
   action() {
     BlazeLayout.render('lAdmin', {

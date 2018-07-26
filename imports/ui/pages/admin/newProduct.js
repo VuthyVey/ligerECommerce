@@ -1,5 +1,6 @@
 // import templates
 import './newProduct.html';
+import '/imports/ui/components/selectImage/selectImage.js';
 // import collections
 import { Products } from '/imports/api/products/products.js';
 import { Categories } from '/imports/api/categories/categories.js';
@@ -7,7 +8,6 @@ import { Images } from '/imports/api/images/images.js';
 // import functionalities
 import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { Modal } from 'meteor/peppelg:bootstrap-3-modal'; // normal bootstrap code doesn't work so this package is the alternative
 import { _ } from 'meteor/underscore'; //underscore isn't in global scope so we import it
 import { fetchSubCategory } from './javascript/subcategory.js';
 
@@ -41,16 +41,12 @@ Template.App_newProduct.onRendered(function() {
       // session handle image | check helpers
       Session.set('productImageId', productInfo.image._id);
     } else { // if product ID doesn't exist
-      FlowRouter.go('/');
+      FlowRouter.go('/admin/products/new');
     }
   }
 });
 
 Template.App_newProduct.helpers({
-  currentProductImage() {
-    return Images.findOne({_id: Session.get("productImageId")});
-  },
-
   isEditMode() {
     return (Session.get('productStatus') == "edit") ? true : false;
   },
@@ -67,11 +63,6 @@ Template.App_newProduct.helpers({
 });
 
 Template.App_newProduct.events({
-
-  'click #selectImageBtn' (events, templates) {
-    Modal.show('selectImageModal');
-  },
-
   'submit #newProductForm' (events, template) {
     events.preventDefault();
     // get the selected image object
@@ -140,18 +131,5 @@ Template.App_newProduct.events({
         }
       });
     }
-  }
-});
-
-Template.selectImageModal.helpers({
-  images: function() {
-    return Images.find({}, {sort: {uploadedAt: -1}}); // new upload come first
-  }
-});
-
-Template.selectImageModal.events({
-  'click .productImage' (e, tpl) {
-    Session.set('productImageId', this._id); // set a new selected image id
-    Modal.hide('selectImageModal');
   }
 });

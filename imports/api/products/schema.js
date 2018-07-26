@@ -5,10 +5,7 @@ import { Categories } from '/imports/api/categories/categories.js';
 
 const Schemas = {};
 
-var categoriesList = Categories.find({}).fetch();
-  categoriesList = categoriesList.map(function (doc) {
-  return doc.slug;
-});
+
 
 Schemas.Name = new SimpleSchema({
   english: {
@@ -61,7 +58,13 @@ Schemas.Products = new SimpleSchema({
   },
   'categories.$': {
     type: String,
-    allowedValues: categoriesList
+    allowedValues: function () {
+      var categoriesList = Categories.find({}).fetch();
+        categoriesList = categoriesList.map(function (doc) {
+        return doc.slug;
+      });
+      return categoriesList;
+    }
   },
   purchaseNote: {
     type: String,

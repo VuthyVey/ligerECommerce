@@ -22,6 +22,12 @@ Schemas.Categories = new SimpleSchema({
   'tree.$': {
     type: String
   },
+  image: {
+    label: "Image",
+    type: Object,
+    optional: true,
+    blackbox: true
+  },
   createdAt: {
     type: Number,
     label: "Create At",

@@ -1,6 +1,9 @@
 <template name="App_allProduct">
   <div class="content mt-3">
       <div class="animated fadeIn">
+          <a href="/admin/products/new" class="btn btn-primary">Add New Product</a>
+          <br>
+          <br>
           <div class="row">
 
           <div class="col-md-12">
@@ -13,16 +16,18 @@
                   <th>Sale Price</th>
                   <th>Unit</th>
                   <th>Category</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                 {{#each ProductsList}}
                 <tr>
-                  <td>{{englishName}}</td>
-                  <td>{{khmerName}}</td>
+                  <td>{{name.english}}</td>
+                  <td>{{name.khmer}}</td>
                   <td>${{salePrice}}</td>
                   <td>{{unit}}</td>
-                  <td>{{category}}</td>
+                  <td>{{categories}}</td>
+                  <td><a href="/admin/products/edit/{{_id}}" class="btn btn-primary">edit</a><button id="deleteBtn" class="btn btn-danger">delete</button></td>
                 </tr>
                 {{/each}}
               </tbody>

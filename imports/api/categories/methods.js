@@ -5,13 +5,8 @@ import { Schemas } from './schema.js';
 Categories.attachSchema(Schemas.Categories);
 
 Meteor.methods({
-  'categories.new' (name, slug, parent, tree) {
-    return Categories.insert({
-      name: name,
-      slug: slug,
-      parent: parent,
-      tree: tree
-    });
+  'categories.new' (categoriesObj) {
+    return Categories.insert(categoriesObj);
   },
   'categories.delete' (id, slug, parent) {
     // remove this category from tree array

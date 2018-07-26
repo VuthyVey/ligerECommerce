@@ -2,6 +2,7 @@
 import './categories.html';
 // import collection
 import { Categories } from '/imports/api/categories/categories.js';
+import { Images } from '/imports/api/images/images.js';
 // import functionalities
 import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
@@ -30,17 +31,28 @@ Template.App_categories.events({
     const name = target.name.value;
     const slug = target.slug.value;
     const parent = target.parent.value;
+    const imgObj = Images.findOne({_id: Session.get("productImageId")});
+
 
     var tree = [];
     if (!parent == '') {
       tree = Categories.find({slug: parent}).fetch()[0].tree;
       tree.push(parent);
     }
-    Meteor.call('categories.new', name, slug, parent, tree, (err, result) => {
+
+    const categoriesObj = {
+      name: name,
+      slug: slug,
+      parent: parent,
+      tree: tree,
+      image: imgObj
+    }
+    Meteor.call('categories.new', categoriesObj, (err, result) => {
       if (err) {
         swal("Opp...", err.reason, "warning");
       } else {
         console.log('succeed');
+        Session.set('productImageId', '')
       }
     });
     target.name.value = '';

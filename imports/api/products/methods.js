@@ -23,5 +23,8 @@ Meteor.methods({
     }, {
       $set: productObject
     });
+  },
+  'product.remove' (id) {
+    return Products.remove(id);
   }
 });

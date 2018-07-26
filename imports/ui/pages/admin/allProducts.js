@@ -9,10 +9,19 @@ Template.App_allProduct.onCreated(function() {
 })
 Template.App_allProduct.helpers({
   ProductsList() {
-    return Products.find({}).fetch()
+    return Products.find({}, {sort: {"name.english": 1}}).fetch()
   }
-})
+});
 
 Template.App_allProduct.events({
+  'click #deleteBtn' () {
+    var id = this._id;
+    Meteor.call('product.remove', id, (err, res) => {
+      if (err) {
+        throw Meteor.Error(err);
+      } else {
 
+      }
+    })
+  }
 });
