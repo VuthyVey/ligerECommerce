@@ -6,7 +6,7 @@ import { Images } from '/imports/api/images/images.js';
 // import functionalities
 import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
-import { fetchSubCategory } from './javascript/subcategory.js';
+import { fetchSubCategory } from '/imports/ui/pages/javascript/subcategory.js';
 
 Template.App_categories.helpers({
   categoriesList () {

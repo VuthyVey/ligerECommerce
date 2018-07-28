@@ -1,9 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 
 var createThumb = resizeImageStream({
-  width: 200,
-  height: 200,
-  format: 'image/jpeg',
+  width: 720,
+  height: 720,
+  format: 'image/png',
   quality: 100
 });
 

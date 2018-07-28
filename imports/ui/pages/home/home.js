@@ -2,6 +2,7 @@ import './home.html';
 
 import '../../components/header/header.js';
 import '../../components/admin/left-panel.html';
+import '../../components/headerFixed.html';
 
 Template.App_home.rendered = function () {
   import './parallax100.js'

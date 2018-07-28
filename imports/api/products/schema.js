@@ -37,7 +37,7 @@ Schemas.Products = new SimpleSchema({
     type: String,
     label: "Unit",
     allowedValues: function() {
-      return ['kg', 'gram', 'bun', 'pack']
+      return ['kg', 'gram', 'bun', 'pack', 'pc']
     }
   },
   min: {

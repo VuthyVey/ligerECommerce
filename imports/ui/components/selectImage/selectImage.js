@@ -12,8 +12,23 @@ Template.cSelectImage.events({
   'click #selectImageBtn' (events, templates) {
     Modal.show('selectImageModal');
   },
-});
+  'change #upload' (event, template) {
+    var file = $('#upload').get(0).files[0]; // get object from file input
 
+    if (file) {
+      var fsFile = new FS.File(file); // convert to FS.File
+      fsFile.updatedAt(moment().unix()); // change updatedAt format to timestamp
+      fsFile.owner = Meteor.userId(); // default doesn't include, add owner to the image object
+      Images.insert(fsFile, function(err, res) { //insert image // proper way is to call meteor method
+        if (err) {
+          throw new Meteor.Error(err);
+        } else {
+          Session.set('productImageId', res._id);
+        }
+      });
+    }
+  }
+});
 Template.selectImageModal.events({
   'click .productImage' (e, tpl) {
     Session.set('productImageId', this._id); // set a new selected image id

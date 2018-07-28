@@ -9,7 +9,7 @@ import { Images } from '/imports/api/images/images.js';
 import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { _ } from 'meteor/underscore'; //underscore isn't in global scope so we import it
-import { fetchSubCategory } from './javascript/subcategory.js';
+import { fetchSubCategory } from '/imports/ui/pages/javascript/subcategory.js';
 
 Template.App_newProduct.onRendered(function() {
   Session.set("productImageId", ""); // empty
@@ -111,23 +111,6 @@ Template.App_newProduct.events({
           console.log(error)
         } else {
           swal("Yay", productInfo.name.english + " updated to database", "success");
-        }
-      });
-    }
-  },
-
-  'change #upload' (event, template) {
-    var file = $('#upload').get(0).files[0];   // get object from file input
-
-    if (file) {
-      var fsFile = new FS.File(file); // convert to FS.File
-      fsFile.updatedAt(moment().unix()); // change updatedAt format to timestamp
-      fsFile.owner = Meteor.userId(); // default doesn't include, add owner to the image object
-      Images.insert(fsFile, function(err, res) { //insert image // proper way is to call meteor method
-        if (err) {
-          throw new Meteor.Error(err);
-        } else {
-          Session.set('productImageId', res._id);
         }
       });
     }
