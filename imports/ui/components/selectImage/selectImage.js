@@ -1,6 +1,6 @@
 import './selectImage.html';
 import { Images } from '/imports/api/images/images.js';
-import { Modal } from 'meteor/peppelg:bootstrap-3-modal'; // normal bootstrap code doesn't work so this package is the alternative
+// import { Modal } from 'meteor/peppelg:bootstrap-3-modal'; // normal bootstrap code doesn't work so this package is the alternative
 
 Template.cSelectImage.helpers({
   currentProductImage() {
@@ -10,7 +10,7 @@ Template.cSelectImage.helpers({
 
 Template.cSelectImage.events({
   'click #selectImageBtn' (events, templates) {
-    Modal.show('selectImageModal');
+    // Modal.show('selectImageModal');
   },
   'change #upload' (event, template) {
     var file = $('#upload').get(0).files[0]; // get object from file input

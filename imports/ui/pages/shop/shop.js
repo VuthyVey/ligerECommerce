@@ -11,6 +11,8 @@ import { _ } from 'meteor/underscore'; //underscore isn't in global scope so we 
 import { fetchSubCategory } from '/imports/ui/pages/javascript/subcategory.js';
 import { ReactiveVar} from 'meteor/reactive-var';
 
+const ADD_TODO = 'ADD_TODO'
+
 Template.App_shop.onCreated(function () {
   Session.setDefault('searchProduct', '');
   Session.setDefault('sortingType', 'default');

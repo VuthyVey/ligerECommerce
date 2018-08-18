@@ -20,6 +20,7 @@ shell-server@0.3.1            # Server-side component of the `meteor shell` comm
 kadira:flow-router      # FlowRouter is a very simple router for Meteor
 kadira:blaze-layout     # Layout manager for blaze (works well with FlowRouter)
 less@2.7.12                    # Leaner CSS language
+gadicc:blaze-react-component
 
 meteortesting:mocha               # A package for writing and running your meteor app and package tests with mocha
 johanbrook:publication-collector  # Test a Meteor publication by collecting its output
@@ -39,13 +40,12 @@ aldeed:schema-index
 msavin:mongol
 momentjs:moment
 dburles:collection-helpers
-twbs:bootstrap
-staringatlights:fast-render
+#twbs:bootstrap
 fortawesome:fontawesome
-skinnygeek1010:validate-form
 cfs:standard-packages
 cfs:gridfs
 # cfs:filesystem
 cfs:ui
-peppelg:bootstrap-3-modal
 numtel:cfs-image-resize           # alternative of graphicsmagick package
+react-template-helper
+react-meteor-data
