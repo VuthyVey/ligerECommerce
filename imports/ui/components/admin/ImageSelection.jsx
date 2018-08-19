@@ -31,8 +31,6 @@ class ImageSelection extends React.Component {
     this.setState({selectedImageId: imageId});
   }
 
-
-
   uploadImage(event) {
     const file = this.fileInput.current.files[0] // get object from file input
     var currentThis = this;
@@ -127,8 +125,7 @@ const mapTrackerToProps = (props)=> {
   Meteor.subscribe('images');
   return {
     images: Images.find({}, {sort: {uploadedAt: -1}}).fetch(),
-    currentUser: "Vuthy",
-    currentImage: Images.findOne({_id: props.imageId)
+    currentUser: "Vuthy"
   };
 }
 
@@ -140,11 +137,8 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({
-    onUpdateSelectedImageId: selectedImageIdAction
-  }, dispatch)
+  return { onUserChange: bindActionCreators(action, dispatch) }
 
-}
 }
 
 
