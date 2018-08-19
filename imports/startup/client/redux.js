@@ -1,41 +1,36 @@
 import { combineReducers, createStore } from 'redux';
+import imageReducer from '/imports/reducers/selectedImageIdReducers.js';
 
-function productReducers(state = [], action) {
+export function productsReducer(state = [], action) {
   return state;
 }
 
-function userReducers(state = '', action) {
-  switch (action.type) {
-    case 'updateUser':
-      return "HelloWorld";
-      break;
-    default:
-      return state;
+export function userReducer(state = '', action) {
+  switch(action.type) {
+    case 'updateUser' :
+      return "asfdsafs";
   }
+  return state;
 }
-
-function ImageReducers(state = '', action) {
-  return 'state';
-}
-
 const allReducers = combineReducers({
-  product:productReducers,
-  user: userReducers,
-  images: ImageReducers
+  products: productsReducer,
+  user: userReducer,
+  imageId: imageReducer
 })
 
 const store = createStore(allReducers, {
-  user: 'Vuthy',
-  product: {item: 'apple'}
-}, window.devToolsExtension && window.devToolsExtension()
-);
-console.log(store.getState());
+  products: [{name: 'Iphone'}],
+  user: 'Vuthy'
+}, window.devToolsExtension && window.devToolsExtension());
 
-const updateUserAction = {
+
+export function action () {
+  console.log("firing")
+  return {
   type: 'updateUser',
   payload: {
     user: 'John'
   }
-}
+}}
 
-store.dispatch(updateUserAction)
+export default store;

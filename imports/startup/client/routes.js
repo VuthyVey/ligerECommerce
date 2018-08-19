@@ -24,8 +24,9 @@ import Comments from '/imports/ui/components/testing.js';
 import App_newProduct from '/imports/ui/components/testing.js'
 import BlogLayout from '/imports/ui/layouts/blog.jsx';
 import AdminLayout from '/imports/ui/layouts/admin.jsx';
-
+import store from '/imports/startup/client/redux.js'
 import ProductModiferForm from '/imports/ui/components/admin/ProductModiferForm.jsx';
+import { Provider } from 'react-redux'
 
 const NewProduct = () => (<div>
   <Blaze template="App_newProduct" />
@@ -53,7 +54,7 @@ FlowRouter.route('/admin/product/new', {
     action: function(params, queryParams) {
       console.log("Yeah! We are on the post:", params.postId);
       mount(AdminLayout, {
-        content: <ProductModiferForm />
+        content: <Provider store={store}><ProductModiferForm /></Provider>
       });
     }
 });

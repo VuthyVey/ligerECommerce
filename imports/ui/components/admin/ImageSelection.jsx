@@ -2,7 +2,9 @@ import React from 'react';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {withTracker} from 'meteor/react-meteor-data';
 import {Images} from '/imports/api/images/images.js';
-
+import connectMeteor from 'react-redux-meteor-data';
+import userReducer, {action, productsReducer} from '/imports/startup/client/redux.js';
+import { bindActionCreators } from 'redux';
 
 class ImageSelection extends React.Component {
 
@@ -15,7 +17,7 @@ class ImageSelection extends React.Component {
     this.fileInput = React.createRef();
     this.toggle = this.toggle.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
-    Session.set('selectedImageId', "vTnLBX6ofyPP9y9PJ")
+    this.onUserChange = this.onUserChange.bind(this);
   }
 
   toggle() {
@@ -29,6 +31,8 @@ class ImageSelection extends React.Component {
     this.setState({selectedImageId: imageId});
   }
 
+
+
   uploadImage(event) {
     const file = this.fileInput.current.files[0] // get object from file input
     var currentThis = this;
@@ -41,14 +45,14 @@ class ImageSelection extends React.Component {
           throw new Meteor.Error(err);
         } else {
           console.log("Hello " + res._id);
-          Session.set('selectedImageId', res._id);
-          // setTimeout(() => {
-          //
-          //   currentThis.setState({
-          //     selectedImageId : res._id
-          //   });
-          //
-          // }, 1000);
+          // Session.set('selectedImageId', res._id);
+          setTimeout(() => {
+
+            currentThis.setState({
+              selectedImageId : res._id
+            });
+
+          }, 1000);
         }
       });
     }
@@ -78,6 +82,10 @@ class ImageSelection extends React.Component {
     }
   }
 
+  onUserChange () {
+    console.log("hi")
+    this.props.onUserChange();
+  }
 
   render() {
     return (
@@ -92,6 +100,9 @@ class ImageSelection extends React.Component {
 
       <Button className="btn btn-secondary mb-1" onClick={this.toggle}>
         Select Image
+      </Button>
+      <Button className="btn btn-secondary mb-1" onClick={this.onUserChange}>
+        {this.props.user}
       </Button>
 
       <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
@@ -112,13 +123,29 @@ class ImageSelection extends React.Component {
     )
   }
 }
-
-export default withTracker((props) => {
+const mapTrackerToProps = (props)=> {
   Meteor.subscribe('images');
   return {
     images: Images.find({}, {sort: {uploadedAt: -1}}).fetch(),
     currentUser: "Vuthy",
-    currentImage: Images.findOne({_id: Session.get('selectedImageId')})
+    currentImage: Images.findOne({_id: props.imageId)
   };
+}
 
-})(ImageSelection);
+const mapStateToProps = (state, ownProps) => {
+  return {
+    user: state.user,
+    imageId: state.imageId
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    onUpdateSelectedImageId: selectedImageIdAction
+  }, dispatch)
+
+}
+}
+
+
+export default connectMeteor(mapTrackerToProps, mapStateToProps, mapDispatchToProps)(ImageSelection)
