@@ -10,3 +10,6 @@ import '../../api/images/server/publications.js';
 // categories
 import '../../api/categories/methods.js';
 import '../../api/categories/server/publications.js';
+// carts
+import '../../api/carts/methods.js';
+import '../../api/carts/server/publications.js';

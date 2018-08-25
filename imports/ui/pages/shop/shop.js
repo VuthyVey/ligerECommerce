@@ -3,19 +3,22 @@ import './shop.html'
 // import collections
 import { Products } from '/imports/api/products/products.js';
 import { Categories } from '/imports/api/categories/categories.js';
-import { Images } from '/imports/api/images/images.js';
+import { Carts } from '/imports/api/carts/carts.js';
+
 // import functionalities
 import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { _ } from 'meteor/underscore'; //underscore isn't in global scope so we import it
 import { fetchSubCategory } from '/imports/ui/pages/javascript/subcategory.js';
 import { ReactiveVar} from 'meteor/reactive-var';
+import swal from 'sweetalert';
+
 
 Template.App_shop.onCreated(function () {
   Session.setDefault('searchProduct', '');
   Session.setDefault('sortingType', 'default');
   Session.setDefault('priceRange', '');
-  Session.setDefault('selectedCategory', null);
+  Session.setDefault('selectedCategory', 'all');
 
   this.sortingType = new ReactiveVar( "default" );
   this.searchQueue = new ReactiveVar( "" );
@@ -125,9 +128,19 @@ Template.App_shop.helpers({
 });
 
 Template.App_shop.events({
-  'click button' () {
+  'click button.add-to-cart' (e, tmp) {
     var nameProduct = this.name.english;
-    swal(nameProduct, "is added to cart !", "success");
+    swal(this.min + this.unit + " of " + nameProduct, "is added to cart !", "success");
+    var productObject = this;
+
+    productObject.amount = productObject.min;
+    productObject.totalCost = productObject.salePrice * productObject.amount;
+    Meteor.call('productAddToCart', productObject, (error, result) => {
+      if (error) {
+        swal("Oops...", error.reason, "error");
+        console.log(error)
+      }
+    })
   },
   'keyup #searchProductInput' (event, template) {
     var searchQueue = $('#searchProductInput').val().trim();
@@ -153,5 +166,5 @@ Template.App_shop.events({
     var selectedCategory = $(event.target).attr('categories')
     event.preventDefault();
     Session.set('selectedCategory', selectedCategory)
-  },
+  }
 })

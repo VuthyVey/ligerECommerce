@@ -2,6 +2,10 @@ import './selectImage.html';
 import { Images } from '/imports/api/images/images.js';
 import { Modal } from 'meteor/peppelg:bootstrap-3-modal'; // normal bootstrap code doesn't work so this package is the alternative
 
+Template.cSelectImage.onRendered(()=> {
+  Session.set("productImageId", "")
+});
+
 Template.cSelectImage.helpers({
   currentProductImage() {
     return Images.findOne({_id: Session.get("productImageId")});

@@ -40,7 +40,9 @@ FlowRouter.route('/shop', {
   name: 'App.shop', // name of the route, it should be unique among all routers
   subscriptions: function () {
     this.register('Product All', Meteor.subscribe('productAll')); //
+    this.register('image', Meteor.subscribe('images')); //
     this.register('categoriesAll', Meteor.subscribe('categoriesAll')); // all categoreis
+    this.register('cartsAll', Meteor.subscribe('cartsAll'))
   },
   action() {
     BlazeLayout.render('lShop', {

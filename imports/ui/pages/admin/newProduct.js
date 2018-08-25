@@ -11,6 +11,8 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { _ } from 'meteor/underscore'; //underscore isn't in global scope so we import it
 import { fetchSubCategory } from '/imports/ui/pages/javascript/subcategory.js';
 
+import swal from 'sweetalert'
+
 Template.App_newProduct.onRendered(function() {
   Session.set("productImageId", ""); // empty
 
