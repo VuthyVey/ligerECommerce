@@ -29,6 +29,12 @@ Schemas.Carts = new SimpleSchema({
     type: Object,
     blackbox: true
   },
+  totalCost : {
+    type: Number,
+    label: "Total Cost",
+    defaultValue: 0
+  }
+  ,
   createdAt: {
     type: Number,
     label: "Create At",

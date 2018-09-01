@@ -23,9 +23,13 @@ Meteor.methods({
 
     if (productObject.isInstock) {
       if (isProductExistInCart) {
-        return Carts.update({_id: cartId, 'productsList._id': productObject._id}, { $inc : {"productsList.$.amount" : productObject.amount, "productsList.$.totalCost" : productObject.totalCost} })
+
+        Carts.update({_id: cartId, 'productsList._id': productObject._id}, { $inc : {"productsList.$.amount" : productObject.amount, "productsList.$.totalCost" : productObject.totalCost} });
+        return Meteor.call('updateTotalCost', cartId);
       } else {
-        return Carts.update(cartId, { $push: { productsList: productObject }});
+
+        Carts.update(cartId, { $push: { productsList: productObject }});
+        return Meteor.call('updateTotalCost', cartId);
       }
 
     } else {
@@ -33,10 +37,27 @@ Meteor.methods({
     }
 
   },
-  'addNewCart' () {
-    var template = {
-      productsList: []
-    }
-    return Carts.insert(template);
+  'updateTotalCost' (cartId) {
+    const cart = Carts.findOne(cartId);
+    const productsList = cart.productsList;
+    var totalCost = 0;
+    console.log(productsList)
+    productsList.map(function(product) {
+      totalCost += product.totalCost;
+    });
+    console.log("Total Cost" + totalCost);
+    return Carts.update(cartId, {$set: {totalCost: totalCost}})
+  },
+  'removeProductFromCart' (cartId, productId) {
+    Carts.update(cartId, {$pull: {productsList : { _id: productId}}});
+    Meteor.call('updateTotalCost', cartId )
+  },
+  'changeAmountToProduct' (cartId, productId, amount, price) {
+    Carts.update({_id: cartId, 'productsList._id': productId}, {$inc: {"productsList.$.amount" : amount, "productsList.$.totalCost" : amount * price}})
+    Meteor.call('updateTotalCost', cartId);
+  },
+  'setAmountProductInCart' (cartId, productId, amount, price) {
+    Carts.update({_id: cartId, 'productsList._id': productId}, {$set: {"productsList.$.amount" : amount, "productsList.$.totalCost" : amount * price}})
+    Meteor.call('updateTotalCost', cartId);
   }
 });

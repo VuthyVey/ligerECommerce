@@ -12,6 +12,7 @@ import '../../ui/pages/admin/allProducts.js';
 import '../../ui/pages/admin/categories.js';
 import '../../ui/pages/accounts/login.js';
 import '../../ui/pages/shop/shop.js';
+import '../../ui/pages/cart/cart.js';
 
 import '../../ui/pages/not-found/not-found.js';
 
@@ -40,13 +41,26 @@ FlowRouter.route('/shop', {
   name: 'App.shop', // name of the route, it should be unique among all routers
   subscriptions: function () {
     this.register('Product All', Meteor.subscribe('productAll')); //
-    this.register('image', Meteor.subscribe('images')); //
     this.register('categoriesAll', Meteor.subscribe('categoriesAll')); // all categoreis
     this.register('cartsAll', Meteor.subscribe('cartsAll'))
   },
   action() {
     BlazeLayout.render('lShop', {
       main: 'App_shop'
+    });
+  },
+});
+
+FlowRouter.route('/cart', {
+  name: 'App.cart', // name of the route, it should be unique among all routers
+  subscriptions: function () {
+    this.register('Product All', Meteor.subscribe('productAll')); //
+    this.register('categoriesAll', Meteor.subscribe('categoriesAll')); // all categoreis
+    this.register('cartsAll', Meteor.subscribe('cartsAll'))
+  },
+  action() {
+    BlazeLayout.render('lShop', {
+      main: 'App_cart'
     });
   },
 });
