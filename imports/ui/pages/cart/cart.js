@@ -32,14 +32,20 @@ Template.App_cart.events({
     })
   },
   'click #decreaseBtn' () {
-    var cart = Carts.findOne({createdBy: Meteor.userId()})
+    var cart = Carts.findOne({createdBy: Meteor.userId()});
+    var amount = -this.min;
+    if (this.amount != this.min) {
+      Meteor.call("changeAmountToProduct", cart._id, this._id, amount, this.salePrice,(error, result) => {
+        if (error) {
+          swal("Oops...", error.reason, "error");
+          console.log(error);
+        }
+      })
+    }
 
-    Meteor.call("changeAmountToProduct", cart._id, this._id, -this.min, this.salePrice,(error, result) => {
-      if (error) {
-        swal("Oops...", error.reason, "error");
-        console.log(error);
-      }
-    })
+
+
+
   },
   'click .removeProduct' (event, template){
     console.log(this._id)

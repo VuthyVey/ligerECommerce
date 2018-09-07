@@ -13,6 +13,7 @@ import '../../ui/pages/admin/categories.js';
 import '../../ui/pages/accounts/login.js';
 import '../../ui/pages/shop/shop.js';
 import '../../ui/pages/cart/cart.js';
+import '../../ui/pages/user/orders.js';
 
 import '../../ui/pages/not-found/not-found.js';
 
@@ -61,6 +62,20 @@ FlowRouter.route('/cart', {
   action() {
     BlazeLayout.render('lShop', {
       main: 'App_cart'
+    });
+  },
+});
+
+FlowRouter.route('/orders', {
+  name: 'App.checkout', // name of the route, it should be unique among all routers
+  subscriptions: function () {
+    this.register('Product All', Meteor.subscribe('productAll')); //
+    this.register('categoriesAll', Meteor.subscribe('categoriesAll')); // all categoreis
+    this.register('cartsAll', Meteor.subscribe('cartsAll'))
+  },
+  action() {
+    BlazeLayout.render('lShop', {
+      main: 'App_User_order'
     });
   },
 });

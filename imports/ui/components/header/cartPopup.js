@@ -8,6 +8,7 @@ Template.cartPopup.helpers({
     if (cart != undefined) {
         cart.totalCost = cart.totalCost.toFixed(2);
         cart.productsList.map(function (product) {
+          product.amount = product.amount.toFixed(2);
           product.totalCost = product.totalCost.toFixed(2);
           return product
         });
