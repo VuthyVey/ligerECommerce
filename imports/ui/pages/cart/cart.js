@@ -59,7 +59,6 @@ Template.App_cart.events({
     })
   },
   'change .num-product' (e, tmp) {
-    console.log("Hello World");
     var cart = Carts.findOne({createdBy: Meteor.userId()});
     var amount = parseFloat(e.target.value);
 
@@ -72,5 +71,36 @@ Template.App_cart.events({
     $(e.target).val(amount);
 
     Meteor.call("setAmountProductInCart", cart._id, this._id, amount , this.salePrice);
-  }
+  },
+  'click #checkoutBtn' () {
+    console.log(this)
+    cartObj = this;
+        swal({
+      title: "Are you sure?",
+      text: "Once checkout, you will not be able to edit this order.",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        Meteor.call('insertToOrder', cartObj, (err, res) => {
+          if (err) {
+            swal("Something is wrong: " + err, {
+              icon: "error",
+            });
+            throw Meteor.Error("Something is wrong: " + err);
+          } else {
+            swal("Thank you for your ordering", {
+              icon: "success",
+            });
+          }
+        })
+      } else {
+
+        swal("You are safe!");
+
+      }
+    });
+      }
 })

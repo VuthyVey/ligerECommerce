@@ -13,3 +13,6 @@ import '../../api/categories/server/publications.js';
 // carts
 import '../../api/carts/methods.js';
 import '../../api/carts/server/publications.js';
+// checkouts
+import '../../api/orders/methods.js';
+import '../../api/orders/server/publications.js';

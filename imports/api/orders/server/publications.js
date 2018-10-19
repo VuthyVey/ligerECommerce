@@ -1,14 +1,12 @@
-// All links-related publications
-
 import { Meteor } from 'meteor/meteor';
-import { Products } from '../products.js';
+import { Orders } from '../orders.js';
 
-Meteor.publish('productAll', function() {
-  return Products.find();
+Meteor.publish('ordersAll', function() {
+  return Orders.find();
 });
 
-Meteor.publish('productById', function(id) {
-  return Products.find({
+Meteor.publish('ordersById', function(id) {
+  return Orders.find({
     _id: id
   });
 });

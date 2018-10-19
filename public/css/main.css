@@ -2080,6 +2080,14 @@ li.sale-noti > a {
   width: 225px;
   padding-left: 50px;
 }
+
+.column-custom {
+  width: 225px;
+  padding-left: 50px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
 .table-shopping-cart .column-2 {
   width: 330px;
   padding-right: 30px;

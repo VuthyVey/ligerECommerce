@@ -4,6 +4,7 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 // Import needed layout template
 import '../../ui/layouts/shop/lShop.js';
 import '../../ui/layouts/admin/lAdmin.js';
+import '../../ui/layouts/user/lUser.js';
 // Import needed pages template
 import '../../ui/pages/home/home.js';
 import '../../ui/pages/admin/admin.js';
@@ -14,6 +15,8 @@ import '../../ui/pages/accounts/login.js';
 import '../../ui/pages/shop/shop.js';
 import '../../ui/pages/cart/cart.js';
 import '../../ui/pages/user/orders.js';
+import '../../ui/pages/user/order_view.js';
+
 
 import '../../ui/pages/not-found/not-found.js';
 
@@ -67,15 +70,31 @@ FlowRouter.route('/cart', {
 });
 
 FlowRouter.route('/orders', {
-  name: 'App.checkout', // name of the route, it should be unique among all routers
+  name: 'App.orders', // name of the route, it should be unique among all routers
   subscriptions: function () {
-    this.register('Product All', Meteor.subscribe('productAll')); //
-    this.register('categoriesAll', Meteor.subscribe('categoriesAll')); // all categoreis
-    this.register('cartsAll', Meteor.subscribe('cartsAll'))
+    // this.register('Product All', Meteor.subscribe('productAll')); //
+    // this.register('categoriesAll', Meteor.subscribe('categoriesAll')); // all categoreis
+    this.register('ordersAll', Meteor.subscribe('ordersAll'))
   },
   action() {
     BlazeLayout.render('lShop', {
       main: 'App_User_order'
+    });
+  },
+});
+
+FlowRouter.route('/orders/view/:orderId', {
+  name: 'App.ordersView', // name of the route, it should be unique among all routers
+  subscriptions: function (params, queryParams) {
+    // this.register('Product All', Meteor.subscribe('productAll')); //
+    // this.register('categoriesAll', Meteor.subscribe('categoriesAll')); // all categoreis
+
+    this.register('ordersById', Meteor.subscribe('ordersById', params.orderId))
+  },
+  action(params, queryParams) {
+    Session.set("OrderId", params.orderId);
+    BlazeLayout.render('lShop', {
+      main: 'App_orderView'
     });
   },
 });

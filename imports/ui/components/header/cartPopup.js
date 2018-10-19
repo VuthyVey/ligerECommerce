@@ -54,5 +54,33 @@ Template.cartPopup.events({
         console.log(error)
       }
     })
-  }
+  },
+  'click #checkoutBtn' () {
+    cartObj = this;
+        swal({
+      title: "Are you sure?",
+      text: "Once checkout, you will not be able to edit this orders.",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        Meteor.call('insertToOrder', cartObj, (err, res) => {
+          if (err) {
+            swal("Something is wrong: " + err, {
+              icon: "error",
+            });
+            throw Meteor.Error("Something is wrong: " + err);
+          } else {
+            swal("Thank you for your ordering", {
+              icon: "success",
+            });
+          }
+        })
+      } else {
+        swal("You are safe!");
+      }
+    });
+      }
 });
