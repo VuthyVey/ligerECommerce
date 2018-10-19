@@ -1,4 +1,9 @@
 <template name="lAdmin">
+
+
+  {{#if subscriptionsReady}}
+    {{#if isAdmin}}
+
   {{> header3}}
 <div class="container1-page">
 
@@ -7,4 +12,12 @@
 </div>
 <script type="text/javascript" src="vendor/animsition/js/animsition.js"></script>
 <script src="/js/main.js"></script>
+
+{{else}}
+      {{> App_notFound}}
+    {{/if}}
+  {{else}}
+    {{> spinner}}
+  {{/if}}
+
 </template>
